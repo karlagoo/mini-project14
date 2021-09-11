@@ -1,6 +1,35 @@
 const router = require('express').Router();
 const { Project } = require('../../models');
 
+router.get('/', async (req,res)=>{
+  try{
+    const projectData= await Project.findAll();
+    console.log(projectData);
+    const projects = projectData.map((project) => project.get({ plain: true }));
+  res.render('homepage', {projects})
+  console.log(projects);
+  }
+  catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+router.get('/:id', async (req, res) =>{
+  try{
+    const projectData = await Project.findByPk(req.params.id,{
+      where:{
+        id: req.params.id
+      }
+    });
+    const projects = projects.map((project) => project.get({ plain: true}));
+    res.render('homepage', {projects})
+    console.log(projects)
+  }
+  catch(err){
+    res.status(500).json(err);
+  }
+})
+
 router.post('/', async (req, res) => {
   try {
     const newProject = await Project.create({
